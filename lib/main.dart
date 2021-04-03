@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -7,6 +10,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    future: Firebase.initializeApp();
     final appTitle = 'Your Address';
 
     return MaterialApp(
@@ -26,6 +30,7 @@ class MyApp extends StatelessWidget {
 
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
+
   @override
   MyCustomFormState createState() {
     return MyCustomFormState();
@@ -35,17 +40,63 @@ class MyCustomForm extends StatefulWidget {
 // Create a corresponding State class.
 // This class holds data related to the form.
 class MyCustomFormState extends State<MyCustomForm> {
+
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("Users");
+  TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  void registerToFb() {
+    firebaseAuth
+        .createUserWithEmailAndPassword(
+        email: emailController.text, password: passwordController.text)
+        .then((result) {
+      dbRef.child(result.user.uid).set({
+        "email": emailController.text,
+        "age": ageController.text,
+        "name": nameController.text
+      }).then((res) {
+
+        print("Login succesful");
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => Home(uid: result.user.uid)),
+        // );
+      });
+    }).catchError((err) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Error"),
+              content: Text(err.message),
+              actions: [
+                FlatButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
     // Build a Form widget using the _formKey created above.
     var scrsize = MediaQuery.of(context).size;
+
     return SingleChildScrollView(
       child: Align(
         alignment: Alignment.center,
@@ -106,7 +157,13 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
 
                 TextFormField(
-
+                  controller: nameController,
+                  validator:  (value) {
+                    if (value.isEmpty) {
+                      return 'Enter Email';
+                    }
+                    return null;
+                  },
                   decoration: InputDecoration(
                       hintText: 'Email',
                       hintStyle: TextStyle(
@@ -249,23 +306,30 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: Container(
+                  child: GestureDetector(
+                    onTap: (){
+                      if (_formKey.currentState.validate()) {
+                        registerToFb();
+                      }
+                    },
+                    child: Container(
 
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.deepOrangeAccent,
-                        border: Border.all(
-                          color: Colors.red[500],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                    ),
-                    width: scrsize.width*0.75,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.deepOrangeAccent,
+                          border: Border.all(
+                            color: Colors.red[500],
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20))
+                      ),
+                      width: scrsize.width*0.75,
 
-                    child: Center(
-                      child: Text(
-                        'SAVE',
-                        style: TextStyle(
-                          color: Colors.white,
+                      child: Center(
+                        child: Text(
+                          'SAVE',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -278,5 +342,6 @@ class MyCustomFormState extends State<MyCustomForm> {
         ),
       ),
     );
+
   }
 }
