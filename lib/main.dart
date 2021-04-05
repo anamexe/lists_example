@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -53,15 +57,20 @@ class MyCustomFormState extends State<MyCustomForm> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController ageController = TextEditingController();
-  void registerToFb() {
+  void registerToFb(String email,String age,String name) {
+    print("bhai bhai");
+    print(email);
+    print(age);
+    print(name);
     firebaseAuth
         .createUserWithEmailAndPassword(
-        email: emailController.text, password: passwordController.text)
+        email: emailController.text,
+        password: passwordController.text)
         .then((result) {
       dbRef.child(result.user.uid).set({
-        "email": emailController.text,
-        "age": ageController.text,
-        "name": nameController.text
+        "email": email,
+        "age": age,
+        "name": name,
       }).then((res) {
 
         print("Login succesful");
@@ -91,6 +100,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
 
@@ -114,6 +124,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 TextFormField(
 
                   decoration: InputDecoration(
+
                   hintText: 'First Name',
                   hintStyle: TextStyle(
                     color: Colors.white70
@@ -134,6 +145,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   height: 15,
                 ),
                 TextFormField(
+                    controller: nameController,
 
                   decoration: InputDecoration(
                       hintText: 'Last Name',
@@ -157,7 +169,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
 
                 TextFormField(
-                  controller: nameController,
+                  controller: emailController,
                   validator:  (value) {
                     if (value.isEmpty) {
                       return 'Enter Email';
@@ -239,9 +251,15 @@ class MyCustomFormState extends State<MyCustomForm> {
                   height: 15,
                 ),
                 TextFormField(
-
+                  controller: passwordController,
+                  validator:  (value) {
+                    if (value.isEmpty) {
+                      return 'Enter Passowrd';
+                    }
+                    return null;
+                  },
                   decoration: InputDecoration(
-                      hintText: 'Permanent Address',
+                      hintText: 'Password',
                       hintStyle: TextStyle(
                           color: Colors.white70
                       ),
@@ -283,9 +301,16 @@ class MyCustomFormState extends State<MyCustomForm> {
                   height: 15,
                 ),
                 TextFormField(
+                  controller: ageController,
+                  validator:  (value) {
+                    if (value.isEmpty) {
+                      return 'Enter age';
+                    }
+                    return null;
+                  },
 
                   decoration: InputDecoration(
-                      hintText: 'Pincode',
+                      hintText: 'Enter age',
                       hintStyle: TextStyle(
                           color: Colors.white70
                       ),
@@ -308,8 +333,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: (){
+                      registerToFb(emailController.text,ageController.text,nameController.text);
                       if (_formKey.currentState.validate()) {
-                        registerToFb();
+                        registerToFb(emailController.text,ageController.text,nameController.text);
+
                       }
                     },
                     child: Container(
