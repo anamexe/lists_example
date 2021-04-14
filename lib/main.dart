@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:lists/secondscrn.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +15,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    future: Firebase.initializeApp();
+
     final appTitle = 'Your Address';
 
     return MaterialApp(
@@ -51,54 +52,10 @@ class MyCustomFormState extends State<MyCustomForm> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("Users");
-  TextEditingController emailController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
-  void registerToFb(String email,String age,String name) {
-    print("bhai bhai");
-    print(email);
-    print(age);
-    print(name);
-    firebaseAuth
-        .createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text)
-        .then((result) {
-      dbRef.child(result.user.uid).set({
-        "email": email,
-        "age": age,
-        "name": name,
-      }).then((res) {
-
-        print("Login succesful");
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => Home(uid: result.user.uid)),
-        // );
-      });
-    }).catchError((err) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Error"),
-              content: Text(err.message),
-              actions: [
-                FlatButton(
-                  child: Text("Ok"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
-    });
-  }
-
+  final _controller_firstname=TextEditingController();
+  final _controller_lastname=TextEditingController();
+  String fname;
+  String lname;
 
 
   @override
@@ -106,6 +63,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
     // Build a Form widget using the _formKey created above.
     var scrsize = MediaQuery.of(context).size;
+
 
     return SingleChildScrollView(
       child: Align(
@@ -123,6 +81,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
                 TextFormField(
 
+                  controller: _controller_firstname,
                   decoration: InputDecoration(
 
                   hintText: 'First Name',
@@ -145,7 +104,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                   height: 15,
                 ),
                 TextFormField(
-                    controller: nameController,
+
+                  controller: _controller_lastname,
 
                   decoration: InputDecoration(
                       hintText: 'Last Name',
@@ -169,7 +129,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
 
                 TextFormField(
-                  controller: emailController,
+
                   validator:  (value) {
                     if (value.isEmpty) {
                       return 'Enter Email';
@@ -197,6 +157,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   height: 15,
                 ),
                 IntlPhoneField(
+
                   decoration: InputDecoration(
                     hintText: 'Phone Number',
                     hintStyle:  TextStyle(
@@ -251,7 +212,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   height: 15,
                 ),
                 TextFormField(
-                  controller: passwordController,
+
                   validator:  (value) {
                     if (value.isEmpty) {
                       return 'Enter Passowrd';
@@ -278,53 +239,57 @@ class MyCustomFormState extends State<MyCustomForm> {
                 SizedBox(
                   height: 15,
                 ),
-                TextFormField(
+                Row(
+                  children: [
+                    Container(
+                      width: 125.0,
+                      child: TextFormField(
 
-                  decoration: InputDecoration(
-                      hintText: 'Confirm permanent address',
-                      hintStyle: TextStyle(
-                          color: Colors.white70
+                        decoration: InputDecoration(
+                            hintText: 'Confirm permanent address',
+                            hintStyle: TextStyle(
+                                color: Colors.white70
+                            ),
+                            suffixIcon: Icon(
+                              Icons.location_on,
+                              color: Colors.deepOrangeAccent,
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.deepOrangeAccent,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
                       ),
-                      suffixIcon: Icon(
-                        Icons.location_on,
-                        color: Colors.deepOrangeAccent,
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.deepOrangeAccent,
-                            width: 2.0,
-                          )
-                      )
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  controller: ageController,
-                  validator:  (value) {
-                    if (value.isEmpty) {
-                      return 'Enter age';
-                    }
-                    return null;
-                  },
+                    ),
 
-                  decoration: InputDecoration(
-                      hintText: 'Enter age',
-                      hintStyle: TextStyle(
-                          color: Colors.white70
+                    SizedBox(
+                      width: 25,
+                    ),
+                    Container(
+                      width: 125.0,
+                      child: TextFormField(
+
+                        decoration: InputDecoration(
+                            hintText: 'Enter age',
+                            hintStyle: TextStyle(
+                                color: Colors.white70
+                            ),
+                            suffixIcon: Icon(
+                              Icons.location_on,
+                              color: Colors.deepOrangeAccent,
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.deepOrangeAccent,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
                       ),
-                      suffixIcon: Icon(
-                        Icons.location_on,
-                        color: Colors.deepOrangeAccent,
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.deepOrangeAccent,
-                            width: 2.0,
-                          )
-                      )
-                  ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 30,
@@ -333,11 +298,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: (){
-                      registerToFb(emailController.text,ageController.text,nameController.text);
-                      if (_formKey.currentState.validate()) {
-                        registerToFb(emailController.text,ageController.text,nameController.text);
-
-                      }
+                    goto(context);
                     },
                     child: Container(
 
@@ -370,5 +331,12 @@ class MyCustomFormState extends State<MyCustomForm> {
       ),
     );
 
+
+  }
+  void goto(BuildContext context){
+    String sendtext= _controller_firstname.text +"\n"+ _controller_lastname.text;
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context)=> secondscrn(name: sendtext,)
+    ));
   }
 }
