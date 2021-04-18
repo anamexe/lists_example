@@ -1,14 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:lists/secondscrn.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -16,17 +11,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final appTitle = 'Your Address';
+    final appTitle = 'Your Billings';
 
     return MaterialApp(
       title: appTitle,
       home: Scaffold(
-        backgroundColor: Colors.black,
+
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: Text(appTitle),
         ),
-        drawer: Drawer(),
+        drawer: Drawer(
+
+        ),
         body: MyCustomForm(),
       ),
     );
@@ -52,8 +49,18 @@ class MyCustomFormState extends State<MyCustomForm> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
-  final _controller_firstname=TextEditingController();
-  final _controller_lastname=TextEditingController();
+  final _cname1=TextEditingController();
+  final _cname2=TextEditingController();
+  final _cname3=TextEditingController();
+  final _cname4=TextEditingController();
+  final _qty1=TextEditingController();
+  final _qty2=TextEditingController();
+  final _qty3=TextEditingController();
+  final _qty4=TextEditingController();
+  final _amt1=TextEditingController();
+  final _amt2=TextEditingController();
+  final _amt3=TextEditingController();
+  final _amt4=TextEditingController();
   String fname;
   String lname;
 
@@ -78,211 +85,83 @@ class MyCustomFormState extends State<MyCustomForm> {
               children: <Widget>[
                 SizedBox(
                   height: 15,
-                ),
-                TextFormField(
 
-                  controller: _controller_firstname,
-                  decoration: InputDecoration(
-
-                  hintText: 'First Name',
-                  hintStyle: TextStyle(
-                    color: Colors.white70
-                  ),
-                    suffixIcon: Icon(
-                      Icons.person,
-                      color: Colors.deepOrangeAccent,
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.deepOrangeAccent,
-                        width: 2.0,
-                      )
-                    )
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-
-                  controller: _controller_lastname,
-
-                  decoration: InputDecoration(
-                      hintText: 'Last Name',
-                      hintStyle: TextStyle(
-                          color: Colors.white70
-                      ),
-                      suffixIcon: Icon(
-                        Icons.person,
-                        color: Colors.deepOrangeAccent,
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.deepOrangeAccent,
-                            width: 2.0,
-                          )
-                      )
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-
-                TextFormField(
-
-                  validator:  (value) {
-                    if (value.isEmpty) {
-                      return 'Enter Email';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: 'Email',
-                      hintStyle: TextStyle(
-                          color: Colors.white70
-                      ),
-                      suffixIcon: Icon(
-                        Icons.email,
-                        color: Colors.deepOrangeAccent,
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.deepOrangeAccent,
-                            width: 2.0,
-                          )
-                      )
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                IntlPhoneField(
-
-                  decoration: InputDecoration(
-                    hintText: 'Phone Number',
-                    hintStyle:  TextStyle(
-                        color: Colors.white70
-                    ),
-                    suffixIcon: Icon(
-                      Icons.phone_android_sharp,
-                      color: Colors.deepOrangeAccent,
-                    ),
-
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.deepOrangeAccent,
-                          width: 2.0
-                      ),
-                    ),
-                  ),
-                  initialCountryCode: 'IN',
-                  onChanged: (phone) {
-                    print(phone.completeNumber);
-                  },
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                IntlPhoneField(
-                  decoration: InputDecoration(
-
-                    hintText: 'Phone Number',
-                    hintStyle:  TextStyle(
-                        color: Colors.white70
-                    ),
-                    suffixIcon: Icon(
-                      Icons.phone_android_sharp,
-                      color: Colors.deepOrangeAccent,
-                    ),
-
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.deepOrangeAccent,
-                          width: 2.0
-                      ),
-                    ),
-                  ),
-                  initialCountryCode: 'IN',
-                  onChanged: (phone) {
-                    print(phone.completeNumber);
-                  },
-                ),
-
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-
-                  validator:  (value) {
-                    if (value.isEmpty) {
-                      return 'Enter Passowrd';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: TextStyle(
-                          color: Colors.white70
-                      ),
-                      suffixIcon: Icon(
-                        Icons.location_on,
-                        color: Colors.deepOrangeAccent,
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.deepOrangeAccent,
-                            width: 2.0,
-                          )
-                      )
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
                 ),
                 Row(
                   children: [
+                    SizedBox(
+                      width: 05,
+                    ),
                     Container(
-                      width: 125.0,
+                      width: 50,
+                      child: Text('01'),
+                    ),
+                    Container(
+                      width: 175.0,
                       child: TextFormField(
-
+                        controller: _cname1,
                         decoration: InputDecoration(
-                            hintText: 'Confirm permanent address',
+                            hintText: 'Particulars',
                             hintStyle: TextStyle(
-                                color: Colors.white70
+                                color: Colors.black12
                             ),
-                            suffixIcon: Icon(
-                              Icons.location_on,
-                              color: Colors.deepOrangeAccent,
-                            ),
+
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.deepOrangeAccent,
+                                  color: Colors.black,
                                   width: 2.0,
                                 )
                             )
                         ),
                       ),
                     ),
-
                     SizedBox(
-                      width: 25,
+                      width: 05,
                     ),
-                    Container(
-                      width: 125.0,
-                      child: TextFormField(
 
+                    Container(
+                      width: 50.0,
+                      child: TextFormField(
+                        controller: _qty1,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         decoration: InputDecoration(
-                            hintText: 'Enter age',
+                            hintText: 'Qty',
                             hintStyle: TextStyle(
-                                color: Colors.white70
+                                color: Colors.black12
                             ),
-                            suffixIcon: Icon(
-                              Icons.location_on,
-                              color: Colors.deepOrangeAccent,
-                            ),
+
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.deepOrangeAccent,
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 05,
+                    ),
+                    Container(
+                      width: 75.0,
+                      child: TextFormField(
+                        controller: _amt1,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                            hintText: 'Amount',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
                                   width: 2.0,
                                 )
                             )
@@ -291,6 +170,280 @@ class MyCustomFormState extends State<MyCustomForm> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 05,
+                    ),
+                    Container(
+                      width: 50,
+                      child: Text('02'),
+                    ),
+                    Container(
+                      width: 175.0,
+                      child: TextFormField(
+                        controller: _cname2,
+                        decoration: InputDecoration(
+                            hintText: 'Particulars',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 05,
+                    ),
+
+                    Container(
+                      width: 50.0,
+                      child: TextFormField(
+                        controller: _qty2,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                            hintText: 'Qty',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 05,
+                    ),
+                    Container(
+                      width: 75.0,
+                      child: TextFormField(
+                        controller: _amt2,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                            hintText: 'Amount',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 05,
+                    ),
+                    Container(
+                      width: 50,
+                      child: Text('03'),
+                    ),
+                    Container(
+                      width: 175.0,
+                      child: TextFormField(
+                        controller: _cname3,
+                        decoration: InputDecoration(
+                            hintText: 'Particulars',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 05,
+                    ),
+
+                    Container(
+                      width: 50.0,
+                      child: TextFormField(
+                        controller: _qty3,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                            hintText: 'Qty',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 05,
+                    ),
+                    Container(
+                      width: 75.0,
+                      child: TextFormField(
+                        controller: _amt3,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                            hintText: 'Amount',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 05,
+                    ),
+                    Container(
+                      width: 50,
+                      child: Text('04'),
+                    ),
+                    Container(
+                      width: 175.0,
+                      child: TextFormField(
+                        controller: _cname4,
+                        decoration: InputDecoration(
+                            hintText: 'Particulars',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 05,
+                    ),
+
+                    Container(
+                      width: 50.0,
+                      child: TextFormField(
+                        controller: _qty4,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                            hintText: 'Qty',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 05,
+                    ),
+                    Container(
+                      width: 75.0,
+                      child: TextFormField(
+                        controller: _amt4,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                            hintText: 'Amount',
+                            hintStyle: TextStyle(
+                                color: Colors.black12
+                            ),
+
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                )
+                            )
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 15,
+                ),
+
+
+                SizedBox(
+                  height: 15,
+                ),
+
+                SizedBox(
+                  height: 15,
+                ),
+
+                SizedBox(
+                  height: 15,
+                ),
+
+                SizedBox(
+                  height: 15,
+                ),
+
                 SizedBox(
                   height: 30,
                 ),
@@ -304,7 +457,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
                       height: 40,
                       decoration: BoxDecoration(
-                          color: Colors.deepOrangeAccent,
+                          color: Colors.black,
                           border: Border.all(
                             color: Colors.red[500],
                           ),
@@ -322,7 +475,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                       ),
                     ),
                   ),
-                )
+                ),
+
 
               ],
             ),
@@ -333,10 +487,33 @@ class MyCustomFormState extends State<MyCustomForm> {
 
 
   }
+
   void goto(BuildContext context){
-    String sendtext= _controller_firstname.text +"\n"+ _controller_lastname.text;
+    String sendcmt1= _cname1.text;
+    String sendcmt2= _cname2.text;
+    String sendcmt3= _cname3.text;
+    String sendcmt4= _cname4.text;
+    String qty1=_qty1.text.toString();
+    String qty2=_qty2.text.toString();
+    String qty3=_qty3.text.toString();
+    String qty4=_qty4.text.toString();
+    String amt1=_amt1.text.toString();
+    String amt2=_amt2.text.toString();
+    String amt3=_amt3.text.toString();
+    String amt4=_amt4.text.toString();
     Navigator.push(context, MaterialPageRoute(
-        builder: (context)=> secondscrn(name: sendtext,)
+        builder: (context)=> secondscrn(pname1: sendcmt1,
+          pname2: sendcmt2,
+          pname3: sendcmt3,
+          pname4: sendcmt4,
+          Q_ty1: qty1,
+          Q_ty2: qty2,
+          Q_ty3: qty3,
+          Q_ty4: qty4,
+          amt1: amt1,
+          amt2: amt2,
+          amt3: amt3,
+          amt4: amt4,)
     ));
   }
 }
